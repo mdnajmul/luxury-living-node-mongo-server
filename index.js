@@ -139,6 +139,13 @@ async function run() {
       res.json(result);
       console.log(result);
     });
+
+    //GET - fetch/get all admins
+    app.get("/admins", async (req, res) => {
+      const cursor = userCollection.find({});
+      const users = await cursor.toArray();
+      res.json(users);
+    });
   } finally {
     //await client.close();
   }
