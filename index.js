@@ -159,6 +159,19 @@ async function run() {
       const result = await cursor.toArray();
       res.json(result);
     });
+
+    // GET - Services books for specific user
+    app.get("/my-books", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const cursor = orderCollection.find(query);
+      if ((await cursor.count()) > 0) {
+        const orders = await cursor.toArray();
+        res.json(orders);
+      } else {
+        res.json({ message: "Booked Services Not Found!" });
+      }
+    });
   } finally {
     //await client.close();
   }
