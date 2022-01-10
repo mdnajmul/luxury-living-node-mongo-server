@@ -223,6 +223,15 @@ async function run() {
       const testimonials = await cursor.toArray();
       res.json(testimonials);
     });
+
+    // POST - Add User Review
+    app.post("/add-review", async (req, res) => {
+      const review = req.body;
+      const result = await testimonialCollection.insertOne(review);
+      res.send(result);
+    });
+
+    /* ========================= Testimonial Collection END ======================= */
   } finally {
     //await client.close();
   }
