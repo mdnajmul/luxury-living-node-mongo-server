@@ -32,6 +32,19 @@ async function run() {
 
     // Collections
     const servicesCollection = database.collection("services");
+
+    /* ========================= Service Collection START ======================= */
+
+    // GET - Get all services
+    app.get("/services", async (req, res) => {
+      const cursor = servicesCollection.find({});
+      if ((await cursor.count()) > 0) {
+        const services = await cursor.toArray();
+        res.json(services);
+      } else {
+        res.json({ message: "Service Not Found!" });
+      }
+    });
   } finally {
     //await client.close();
   }
