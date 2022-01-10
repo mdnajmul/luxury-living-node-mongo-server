@@ -196,13 +196,23 @@ async function run() {
       res.json({ _id: id, modifiedCount: result.modifiedCount });
     });
 
-    // Delete - Delete an Order by admin
+    // Delete - Delete an Order
     app.delete("/orders/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const result = await orderCollection.deleteOne(query);
       res.json({ _id: id, deletedCount: result.deletedCount });
     });
+
+    // POST - Place order
+    app.post("/place-order", async (req, res) => {
+      const order = req.body;
+      order["status"] = "Pending";
+      const result = await orderCollection.insertOne(order);
+      res.json(result);
+    });
+
+    /* ========================= Order Collection END ======================= */
   } finally {
     //await client.close();
   }
