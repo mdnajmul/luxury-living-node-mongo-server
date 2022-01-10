@@ -34,6 +34,7 @@ async function run() {
     const serviceCollection = database.collection("services");
     const userCollection = database.collection("users");
     const orderCollection = database.collection("orders");
+    const testimonialCollection = database.collection("testimonials");
 
     /* ========================= Service Collection START ======================= */
 
@@ -213,6 +214,15 @@ async function run() {
     });
 
     /* ========================= Order Collection END ======================= */
+
+    /* ========================= Testimonial Collection START ======================= */
+
+    // GET - Get All Reviews
+    app.get("/testimonials", async (req, res) => {
+      const cursor = testimonialCollection.find({});
+      const testimonials = await cursor.toArray();
+      res.json(testimonials);
+    });
   } finally {
     //await client.close();
   }
