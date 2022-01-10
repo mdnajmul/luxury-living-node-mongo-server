@@ -64,6 +64,16 @@ async function run() {
       const result = await servicesCollection.insertOne(service);
       res.json(result);
     });
+
+    // Delete - Delete a service by admin
+    app.delete("/service/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await servicesCollection.deleteOne(query);
+      res.json({ _id: id, deletedCount: result.deletedCount });
+    });
+
+    /* ========================= Service Collection END ======================= */
   } finally {
     //await client.close();
   }
