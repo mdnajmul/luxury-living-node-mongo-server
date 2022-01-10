@@ -45,6 +45,25 @@ async function run() {
         res.json({ message: "Service Not Found!" });
       }
     });
+
+    // POST - Add a service by - Admin
+    app.post("/services", async (req, res) => {
+      // Extract image data and convert it to binary base 64
+      const pic = req.files.image;
+      const picData = pic.data;
+      const encodedPic = picData.toString("base64");
+      const imageBuffer = Buffer.from(encodedPic, "base64");
+      // Extract other information and make our service object including image for saveing into MongoDB
+      const { title, description, price } = req.body;
+      const service = {
+        title,
+        description: description.split("\n"),
+        image: imageBuffer,
+        price,
+      };
+      const result = await servicesCollection.insertOne(service);
+      res.json(result);
+    });
   } finally {
     //await client.close();
   }
