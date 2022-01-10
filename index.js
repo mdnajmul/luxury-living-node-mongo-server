@@ -31,13 +31,14 @@ async function run() {
     const database = client.db("luxury_living");
 
     // Collections
-    const servicesCollection = database.collection("services");
+    const serviceCollection = database.collection("services");
+    const userCollection = database.collection("users");
 
     /* ========================= Service Collection START ======================= */
 
     // GET - Get all services
     app.get("/services", async (req, res) => {
-      const cursor = servicesCollection.find({});
+      const cursor = serviceCollection.find({});
       if ((await cursor.count()) > 0) {
         const services = await cursor.toArray();
         res.json(services);
@@ -61,7 +62,7 @@ async function run() {
         image: imageBuffer,
         price,
       };
-      const result = await servicesCollection.insertOne(service);
+      const result = await serviceCollection.insertOne(service);
       res.json(result);
     });
 
@@ -69,7 +70,7 @@ async function run() {
     app.delete("/service/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
-      const result = await servicesCollection.deleteOne(query);
+      const result = await serviceCollection.deleteOne(query);
       res.json({ _id: id, deletedCount: result.deletedCount });
     });
 
@@ -82,6 +83,13 @@ async function run() {
       const cursor = userCollection.find({});
       const users = await cursor.toArray();
       res.json(users);
+    });
+
+    // POST - Save user info to user collection
+    app.post("/users", async (req, res) => {
+      const newUser = req.body;
+      const result = await userCollection.insertOne(newUser);
+      res.json(result);
     });
   } finally {
     //await client.close();
