@@ -74,6 +74,15 @@ async function run() {
     });
 
     /* ========================= Service Collection END ======================= */
+
+    /* ========================= User Collection START ======================= */
+
+    // GET - All users
+    app.get("/users", async (req, res) => {
+      const cursor = userCollection.find({});
+      const users = await cursor.toArray();
+      res.json(users);
+    });
   } finally {
     //await client.close();
   }
