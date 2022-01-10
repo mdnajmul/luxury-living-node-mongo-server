@@ -172,6 +172,29 @@ async function run() {
         res.json({ message: "Booked Services Not Found!" });
       }
     });
+
+    // PUT - Update an order status
+    app.put("/orders/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const found = await orderCollection.findOne(query);
+
+      if (found.status === "Pending") {
+        found.status = "On going";
+      } else if (found.status === "On going") {
+        found.status = "Shipped";
+      }
+
+      const filter = query;
+      const options = { upsert: false };
+      const updateDoc = { $set: found };
+      const result = await orderCollection.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
+      res.json({ _id: id, modifiedCount: result.modifiedCount });
+    });
   } finally {
     //await client.close();
   }
