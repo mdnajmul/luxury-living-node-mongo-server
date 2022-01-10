@@ -33,6 +33,7 @@ async function run() {
     // Collections
     const serviceCollection = database.collection("services");
     const userCollection = database.collection("users");
+    const orderCollection = database.collection("orders");
 
     /* ========================= Service Collection START ======================= */
 
@@ -145,6 +146,18 @@ async function run() {
       const cursor = userCollection.find({});
       const users = await cursor.toArray();
       res.json(users);
+    });
+
+    /* ========================= User Collection END ======================= */
+
+    /* ========================= Order Collection START ======================= */
+
+    // GET - All Orders (for Admin)
+    app.get("/orders", async (req, res) => {
+      const email = req.query.email;
+      const cursor = orderCollection.find({});
+      const result = await cursor.toArray();
+      res.json(result);
     });
   } finally {
     //await client.close();
