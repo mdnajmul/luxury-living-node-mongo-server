@@ -49,6 +49,14 @@ async function run() {
       }
     });
 
+    // GET API - Single Service Details
+    app.get("/services/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const serviceDetails = await serviceCollection.findOne(query);
+      res.json(serviceDetails);
+    });
+
     // POST - Add a service by - Admin
     app.post("/services", async (req, res) => {
       // Extract image data and convert it to binary base 64
